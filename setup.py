@@ -19,7 +19,10 @@ setuptools.setup(
     packages=setuptools.find_packages(where="fargate_with_cdk_part_2"),
 
     install_requires=[
-        "aws-cdk.core==1.128.0",
+        "aws-cdk.core==1.133.0",
+        "aws-cdk.aws-ec2===1.133.0",
+        "aws-cdk.aws-ecs===1.133.0",
+        "aws-cdk.aws-elasticloadbalancingv2===1.133.0",
     ],
 
     python_requires=">=3.6",

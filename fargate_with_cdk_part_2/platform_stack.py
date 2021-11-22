@@ -52,3 +52,6 @@ class PlatformStack(cdk.Stack):
         self.sg_db.connections.allow_from(sg_api,
                                      ec2.Port.tcp(5432),
                                      "Postgresql access")
+
+        # Add default Cloud Map service
+        self.cluster.add_default_cloud_map_namespace(name='service.local')

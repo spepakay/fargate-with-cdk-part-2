@@ -10,9 +10,11 @@ from aws_cdk import core as cdk
 from aws_cdk import core
 
 from fargate_with_cdk_part_2.platform_stack import PlatformStack
-
+from fargate_with_cdk_part_2.db_stack import DbStack
 
 app = core.App()
-PlatformStack(app, "PlatformStack")
+
+platform = PlatformStack(app, "PlatformStack")
+db = DbStack(app, "DbStack", platform.cluster, platform.sg_db)
 
 app.synth()

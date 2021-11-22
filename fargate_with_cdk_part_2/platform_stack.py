@@ -24,10 +24,6 @@ class PlatformStack(cdk.Stack):
         cluster = ecs.Cluster(self,
                               "FargateWithCdkPart2Cluster",
                               vpc=vpc)
-        #cluster.add_capacity("FargateWithCdkPart2ASG",
-        #                     instance_type=ec2.InstanceType.of(
-        #                         ec2.InstanceClass.STANDARD5,
-        #                         ec2.InstanceSize.MICRO))
         
         # Create a new Fargate task definition
         task_def = ecs.FargateTaskDefinition(self,
@@ -35,7 +31,7 @@ class PlatformStack(cdk.Stack):
                                              memory_limit_mib=512,
                                              cpu=256)
         container = task_def.add_container("FargateWithCdkPar2Container",
-                                           image=ecs.ContainerImage.from_registry("amazon/nginx"),
+                                           image=ecs.ContainerImage.from_registry("nginx"),
                                            memory_limit_mib=256)
         port_map = ecs.PortMapping(container_port=80,
                                    host_port=80,
@@ -47,12 +43,6 @@ class PlatformStack(cdk.Stack):
                                         "FargateWithCdkPart2FGService",
                                         cluster=cluster,
                                         task_definition=task_def)
-        
-        # Create a ECS Service
-        #svc = ecs.Ec2Service(self,
-        #                     "FargateWithCdkPart2ECSService",
-        #                     cluster=cluster,
-        #                     task_definition=task_def)
         
         # Create a security group for the ALB
         sg_alb = ec2.SecurityGroup(self,
@@ -74,16 +64,7 @@ class PlatformStack(cdk.Stack):
         listener.add_targets("FargateWithCdkPart2Target",
                              port=80,
                              targets=[fg_service.load_balancer_target(container_name="FargateWithCdkPar2Container",
-                                                                      container_port=80)]
-                             )
-        #fg_service.register_load_balancer_targets(container_port=80,
-        #                                       new_target_group_id="FargateWithCdkPart2Target",
-        #                                       listener=ecs.ListenerConfig.application_listener(listener,
-        #                                                                                        protocol=elb2.ApplicationProtocol.HTTP)
-        #                                       )
-        #listener.add_targets("FargateWithCdkPart2Target",
-        #                     port=80,
-        #                     targets=[fg_service])
+                                                                      container_port=80)])
 
         # Create an security group for API Service
         sg_api = ec2.SecurityGroup(self,
